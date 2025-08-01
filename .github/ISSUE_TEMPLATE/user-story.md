@@ -1,7 +1,8 @@
 ---
-name: user story
-about: this template defines a user story
-title: ''
+name: User Story
+about: this templete defines a user story
+title: "### As a [customer]   I need [a login button]   So that [I can access my account]
+  \ "
 labels: ''
 assignees: ''
 
