@@ -1,26 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {urlConfig} from '../../config';
+import { urlConfig } from '../../config';
 
 function MainPage() {
     const [gifts, setGifts] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Task 1: Write async fetch operation
-        // Write your code below this line
+        // Task 1: Fetch gifts
+        const fetchGifts = async () => {
+            try {
+                let url = `${urlConfig.backendUrl}/api/gifts`
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error; ${response.status}`)
+                }
+                const data = await response.json();
+                setGifts(data);
+            } catch (error) {
+                console.log('Fetch error: ' + error.message);
+            }
+        };
+        fetchGifts();
     }, []);
 
     // Task 2: Navigate to details page
     const goToDetailsPage = (productId) => {
-        // Write your code below this line
-
-      };
+        navigate(`/app/product/${productId}`);
+    };
 
     // Task 3: Format timestamp
     const formatDate = (timestamp) => {
-        // Write your code below this line
-      };
+        const date = new Date(timestamp * 1000);
+        return date.toLocaleDateString('default', { 
+            month: 'long', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+    };
 
     const getConditionClass = (condition) => {
         return condition === "New" ? "list-group-item-success" : "list-group-item-warning";
@@ -31,25 +48,41 @@ function MainPage() {
             <div className="row">
                 {gifts.map((gift) => (
                     <div key={gift.id} className="col-md-4 mb-4">
-                        <div className="card product-card">
+                        <div className="card product-card h-100">
+                            {/* Task 4: Display gift image or placeholder */}
+                            <div className="image-placeholder" style={{ height: '200px', overflow: 'hidden' }}>
+                                {gift.image ? (
+                                    <img 
+                                        src={gift.image} 
+                                        alt={gift.name} 
+                                        className="card-img-top h-100 object-fit-cover"
+                                    />
+                                ) : (
+                                    <div 
+                                        className="no-image-available d-flex align-items-center justify-content-center h-100 bg-light"
+                                    >
+                                        No Image Available
+                                    </div>
+                                )}
+                            </div>
 
-                            {/* // Task 4: Display gift image or placeholder */}
-                            {/* // Write your code below this line */}
-
-                            <div className="card-body">
-
-                                {/* // Task 5: Display gift image or placeholder */}
-                                {/* // Write your code below this line */}
-
+                            <div className="card-body d-flex flex-column">
+                                {/* Task 5: Display gift name */}
+                                <h5 className="card-title">{gift.name}</h5>
+                                
                                 <p className={`card-text ${getConditionClass(gift.condition)}`}>
-                                {gift.condition}
+                                    {gift.condition}
                                 </p>
 
-                                {/* // Task 6: Display gift image or placeholder */}
-                                {/* // Write your code below this line */}
+                                {/* Task 6: Display formatted date */}
+                                <p className="card-text text-muted">
+                                    Posted: {formatDate(gift.date_added)}
+                                </p>
                                 
-
-                                <button onClick={() => goToDetailsPage(gift.id)} className="btn btn-primary">
+                                <button 
+                                    onClick={() => goToDetailsPage(gift.id)} 
+                                    className="btn btn-primary mt-auto"
+                                >
                                     View Details
                                 </button>
                             </div>
