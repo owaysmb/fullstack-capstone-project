@@ -1,19 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AuthContext';
+import { urlConfig } from '../../config';
 import './LoginPage.css';
 
 function LoginPage() {
     // State variables
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [incorrect, setIncorrect] = useState('');
+
+    // Context and navigation
+    const navigate = useNavigate();
+    const bearerToken = sessionStorage.getItem('bearer-token');
+    const { setIsLoggedIn } = useAppContext();
+
+    // Redirect if already logged in
+    useEffect(() => {
+        if (bearerToken) {
+            navigate('/app');
+        }
+    }, [navigate, bearerToken]);
 
     // Login handler
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("Login attempt with:", {
-            email,
-            password
-        });
-        // Add actual login logic here
+        setIncorrect('');
+        
+        try {
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': bearerToken ? `Bearer ${bearerToken}` : '',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            });
+    
+            const json = await response.json(); // Task 1: Access data in JSON format
+    
+            if (response.ok) {
+                // Task 2: Set user details in session storage
+                sessionStorage.setItem('bearer-token', json.token);
+                sessionStorage.setItem('user-id', json.userId);
+                sessionStorage.setItem('user-name', json.name);
+                sessionStorage.setItem('user-email', json.email);
+                
+                // Task 3: Set the user's state to logged in
+                setIsLoggedIn(true);
+                
+                // Task 4: Navigate to MainPage
+                navigate('/app');
+            } else {
+                // Task 5: Clear input and set error message
+                setEmail('');
+                setPassword('');
+                setIncorrect(json.message || 'Invalid email or password');
+                
+                // Clear error message after 2 seconds
+                setTimeout(() => {
+                    setIncorrect('');
+                }, 2000);
+            }
+        } catch (error) {
+            console.log("Error fetching details: " + error.message);
+            setIncorrect('Network error. Please try again.');
+        }
     };
 
     return (
@@ -23,6 +78,12 @@ function LoginPage() {
                     <div className="login-card p-4 border rounded">
                         <h2 className="text-center mb-4 font-weight-bold">Login</h2>
                         
+                        {incorrect && (
+                            <div className="alert alert-danger" role="alert">
+                                {incorrect}
+                            </div>
+                        )}
+
                         <form onSubmit={handleLogin}>
                             {/* Email Input */}
                             <div className="mb-3">
