@@ -1,36 +1,57 @@
-/* Style for image placeholder */
-.image-placeholder-large {
-    /* Task 1 styling */
-    {{insert code here}}
-}
-
-/* Style for product image */
 .product-image-large {
-    /* Task 2 styling */
-    {{insert code here}}
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Style for 'no image available' placeholder */
-.no-image-available-large {
-    /* Task 3 styling */
-    {{insert code here}}
+.no-image-placeholder {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 8px;
+    color: #6c757d;
 }
 
-/* Style for card header */
-.card-header {
-    /* Task 4 styling */
-    {{insert code here}}
+.product-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Style for details title */
-.details-title {
-    /* Task 5 styling */
-    {{insert code here}}
+.condition {
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
 }
 
-/* Style for comments section */
+.condition.new {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.condition.used {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.description {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
 .comments-section {
-    /* Task 6 styling */
-    {{insert code here}}
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
 }
 
+.comment {
+    border-left: 4px solid #6c63ff;
+}
