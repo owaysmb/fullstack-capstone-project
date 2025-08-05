@@ -41,7 +41,10 @@ app.use((err, req, res, next) => {
 app.get("/", (req, res) => {
     res.send("GiftLink Backend Service");
 });
+import Profile from './components/Profile/Profile';
 
+// ... in your Route components
+<Route path="/app/profile" element={<Profile />} />
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
     console.log(`Search endpoint available at /api/search`);
